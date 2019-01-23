@@ -1,5 +1,6 @@
 package tcss450.uw.edu.phishapp;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,7 @@ import tcss450.uw.edu.phishapp.model.Credentials;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginFragmentInteractionListener,
-        RegisterFragment.OnRegisterFragmentInteractionListener, SuccessFragment.OnFragmentInteractionListener {
+        RegisterFragment.OnRegisterFragmentInteractionListener, SuccessFragment.OnSuccessFragmentInteractionListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -36,15 +37,9 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoginSuccess(Credentials credentials, String jwt) {
         Log.wtf(TAG, "Login Success!!!");
 
-        SuccessFragment successFragment = new SuccessFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("key", credentials);
-        successFragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.frame_main_container, successFragment);
-
-        transaction.commit();
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(getString(R.string.key_credentials), credentials);
+        startActivity(intent);
     }
 
     @Override
@@ -62,19 +57,12 @@ public class MainActivity extends AppCompatActivity implements
     public void onRegisterSuccess(Credentials credentials) {
         Log.wtf(TAG, "register success!!!");
 
-        LoginFragment loginFragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("key", credentials);
-        loginFragment.setArguments(args);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack();
 
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.frame_main_container, loginFragment);
-
-        transaction.commit();
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(getString(R.string.key_credentials), credentials);
+        startActivity(intent);
     }
 
     @Override

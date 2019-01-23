@@ -1,7 +1,6 @@
 package tcss450.uw.edu.phishapp;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,21 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.security.cert.Certificate;
-
 import tcss450.uw.edu.phishapp.model.Credentials;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SuccessFragment.OnFragmentInteractionListener} interface
+ * {@link OnSuccessFragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class SuccessFragment extends Fragment {
 
 
-    private OnFragmentInteractionListener mListener;
+    private OnSuccessFragmentInteractionListener mListener;
 
     public SuccessFragment() {
         // Required empty public constructor
@@ -34,8 +31,10 @@ public class SuccessFragment extends Fragment {
         super.onStart();
         if (getArguments() != null) {
             // Could pass
-            Credentials credentials = (Credentials) getArguments().getSerializable("key");
-            updateContent(credentials.getEmail());
+
+
+            Credentials credentials = (Credentials)getArguments().getSerializable((getString(R.string.key_credentials)));
+            updateContent(credentials);
 
         }
     }
@@ -53,11 +52,11 @@ public class SuccessFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnSuccessFragmentInteractionListener) {
+            mListener = (OnSuccessFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnSuccessFragmentInteractionListener");
         }
     }
 
@@ -67,9 +66,9 @@ public class SuccessFragment extends Fragment {
         mListener = null;
     }
 
-    public void updateContent(String text) {
+    public void updateContent(Credentials credentials) {
         TextView tv = getActivity().findViewById(R.id.text_success_userName);
-        tv.setText(text);
+        tv.setText(credentials.getEmail());
     }
 
     /**
@@ -82,7 +81,7 @@ public class SuccessFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnSuccessFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Credentials credentials);
     }

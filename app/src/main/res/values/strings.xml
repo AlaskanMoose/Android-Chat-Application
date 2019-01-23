@@ -16,8 +16,19 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Phish App</string>
+    <string name="nav_header_subtitle">TCSS 450 Labs</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="key_credentials">credentials key</string>
+    <string name="text_fragment_blog_blogTitle">Blog Title</string>
+    <string name="textview_fragment_blog_blog_teaser">Blog teaser</string>
+    <string name="textview_fragment_blog_publish_date">Publish Date</string>
+    <string name="text_fragment_blog_publishDate">Blog Date</string>
+    <string name="text_fragment_blog_sample">Blog Sample</string>
+    <string name="key_blogPost">key blogpost</string>
+    <string name="text_fragment_blog_post_sample">Blog Post</string>
+    <string name="text_fragment_blog_post_blogDate">Date</string>
+    <string name="text_fragment_blog_post_blogTitle">Title</string>
+    <string name="button_fragment_blog_post_fullPost">Full Post</string>
 </resources>
