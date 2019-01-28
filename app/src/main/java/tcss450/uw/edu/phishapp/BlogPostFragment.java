@@ -45,10 +45,8 @@ public class BlogPostFragment extends Fragment {
             TextView details = getActivity().findViewById(R.id.text_fragment_blog_post_sample);
             details.setText(Html.fromHtml(blogPost.getTeaser(),
                     Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE, null, null));
-
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +78,7 @@ public class BlogPostFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnWaitFragmentInteractionListener");
         }
     }
 

@@ -1,4 +1,4 @@
-package tcss450.uw.edu.phishapp.dummy;
+package tcss450.uw.edu.phishapp.SetLists;
 
 import java.io.Serializable;
 

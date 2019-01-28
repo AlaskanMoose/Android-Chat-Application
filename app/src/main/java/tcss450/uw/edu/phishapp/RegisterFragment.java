@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import tcss450.uw.edu.phishapp.model.Credentials;
+import tcss450.uw.edu.phishapp.utils.SendPostAsyncTask;
 
 
 /**
@@ -24,6 +28,7 @@ import tcss450.uw.edu.phishapp.model.Credentials;
 public class RegisterFragment extends Fragment {
 
     private OnRegisterFragmentInteractionListener mListener;
+    private Credentials mCredentials;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -65,15 +70,50 @@ public class RegisterFragment extends Fragment {
         TextView email = getActivity().findViewById(R.id.text_email_register);
         TextView password = getActivity().findViewById(R.id.text_password_register);
         TextView verifyPassword = getActivity().findViewById(R.id.text_verify_password_register);
-        String username = email.getText().toString();
+//        String username = email.getText().toString();
+        TextView userName = getActivity().findViewById(R.id.text_userName_register);
+        TextView firstName = getActivity().findViewById(R.id.text_firstName_register);
+        TextView lastName = getActivity().findViewById(R.id.text_lastName_register);
 
-        if(isFormValid(email, password, verifyPassword)) {
-            Credentials.Builder credBuilder = new Credentials.Builder(username, password.getText().toString());
-            mListener.onRegisterSuccess(credBuilder.build());
+
+
+
+        if(isFormValid(email, password, verifyPassword, userName, firstName, lastName)) {
+//            Credentials.Builder credBuilder = new Credentials.Builder(username, password.getText().toString());
+//            mListener.onRegisterSuccess(credBuilder.build());
+
+            Credentials credentials = new Credentials.Builder(
+                    email.getText().toString(),
+                    password.getText().toString())
+                    .addUsername(userName.getText().toString())
+                    .addFirstName(firstName.getText().toString())
+                    .addLastName(lastName.getText().toString())
+                    .build();
+
+            //build the web service URL
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .appendPath(getString(R.string.ep_base_url))
+                    .appendPath(getString(R.string.ep_register))
+                    .build();
+
+            //build the JSONObject
+            JSONObject msg = credentials.asJSONObject();
+
+            mCredentials = credentials;
+
+            //instantiate and execute the AsyncTask.
+            new SendPostAsyncTask.Builder(uri.toString(), msg)
+                    .onPreExecute(this::handleRegisterOnPre)
+                    .onPostExecute(this::handleRegisterPost)
+                    .onCancelled(this::handleErrorsInTask)
+                    .build().execute();
         }
     }
 
-    private boolean isFormValid(TextView email, TextView password, TextView verifyPassword) {
+
+    private boolean isFormValid(TextView email, TextView password, TextView verifyPassword
+    , TextView userName, TextView firstName, TextView lastName) {
         boolean canRegister  = true;
         if(TextUtils.isEmpty(email.getText())){
             email.setError("Email field left blank");
@@ -99,9 +139,75 @@ public class RegisterFragment extends Fragment {
             verifyPassword.setError("Password do not match");
             canRegister = false;
         }
-
+        if(TextUtils.isEmpty(userName.getText())){
+            userName.setError("User Name cannot be empty");
+            canRegister = false;
+        }
+        if(TextUtils.isEmpty(firstName.getText())) {
+            firstName.setError("First Name cannot be empty");
+            canRegister = false;
+        }
+        if(TextUtils.isEmpty(lastName.getText())){
+            lastName.setError("Last Name cannot be empty");
+            canRegister = false;
+        }
         return canRegister;
     }
+
+    /**
+     * Handle errors that may occur during the AsyncTask.
+     * @param result the error message provide from the AsyncTask
+     */
+    private void handleErrorsInTask(String result) {
+        Log.e("ASYNC_TASK_ERROR",  result);
+    }
+
+    /**
+     * Handle the setup of the UI before the HTTP call to the webservice.
+     */
+    private void handleRegisterOnPre() {
+        mListener.onWaitFragmentInteractionShow();
+
+    }
+
+    /**
+     * Handle onPostExecute of the AsynceTask. The result from our webservice is
+     * a JSON formatted String. Parse it for success or failure.
+     * @param result the JSON formatted String response from the web service
+     */
+    private void handleRegisterPost(String result) {
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success =
+                    resultsJSON.getBoolean(
+                            getString(R.string.keys_json_login_success));
+
+            if (success) {
+                //Register was successful. Switch to the loadSuccessFragment.
+                mListener.onRegisterSuccess(mCredentials);
+                return;
+            } else {
+                //Register was unsuccessful. Don’t switch fragments and
+                // inform the user
+                ((TextView) getView().findViewById(R.id.text_email_register))
+                        .setError("Register Unsuccessful");
+            }
+            mListener.onWaitFragmentInteractionHide();
+        } catch (JSONException e) {
+            //It appears that the web service did not return a JSON formatted
+            //String or it did not have what we expected in it.
+            Log.e("JSON_PARSE_ERROR",  result
+                    + System.lineSeparator()
+                    + e.getMessage());
+
+            mListener.onWaitFragmentInteractionHide();
+            ((TextView) getView().findViewById(R.id.text_email_register))
+                    .setError("Register Unsuccessful");
+        }
+    }
+
+
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -113,7 +219,7 @@ public class RegisterFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnRegisterFragmentInteractionListener {
+    public interface OnRegisterFragmentInteractionListener extends WaitFragment.OnWaitFragmentInteractionListener {
         void onRegisterSuccess(Credentials credentials);
     }
 

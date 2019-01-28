@@ -27,8 +27,21 @@
     <string name="text_fragment_blog_publishDate">Blog Date</string>
     <string name="text_fragment_blog_sample">Blog Sample</string>
     <string name="key_blogPost">key blogpost</string>
+    <string name="key_setList">key setlist</string>
     <string name="text_fragment_blog_post_sample">Blog Post</string>
     <string name="text_fragment_blog_post_blogDate">Date</string>
     <string name="text_fragment_blog_post_blogTitle">Title</string>
     <string name="button_fragment_blog_post_fullPost">Full Post</string>
+    <string name="text_lastName_register">Last Name</string>
+    <string name="text_firstName_register">First Name</string>
+    <string name="text_userName_register">User Name</string>
+    <string name="text_fragment_setList_longDate">Long Date</string>
+    <string name="text_fragment_setList_location">Location</string>
+    <string name="text_fragment_setList_venue">Venue</string>
+    <string name="text_fragment_setlist_item_longDate">Long Date</string>
+    <string name="text_fragment_setlist_item_location">Location</string>
+    <string name="text_fragment_setlist_item_venue">Venue</string>
+    <string name="text_fragment_setlist_item_setListNotes">Set List Notes</string>
+    <string name="text_fragment_setlist_item_setListData">Set List Data</string>
+    <string name="text_fragment_setlist_item_fullText">FULL TEXT</string>
 </resources>

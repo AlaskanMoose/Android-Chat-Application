@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import tcss450.uw.edu.phishapp.blog.BlogGenerator;
 import tcss450.uw.edu.phishapp.blog.BlogPost;
@@ -23,6 +25,9 @@ import tcss450.uw.edu.phishapp.blog.BlogPost;
  * interface.
  */
 public class BlogFragment extends Fragment {
+
+    public static final String ARG_BLOG_LIST = "blogs lists";
+    private List<BlogPost> mBlogs;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -47,14 +52,20 @@ public class BlogFragment extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mBlogs = new ArrayList<BlogPost>(
+                    Arrays.asList((BlogPost[]) getArguments().getSerializable(ARG_BLOG_LIST)));
+        } else {
+            mBlogs = Arrays.asList(BlogGenerator.BLOGS);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +81,7 @@ public class BlogFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyBlogRecyclerViewAdapter(Arrays.asList(BlogGenerator.BLOGS), mListener));
+            recyclerView.setAdapter(new MyBlogRecyclerViewAdapter(mBlogs, mListener));
         }
         return view;
     }

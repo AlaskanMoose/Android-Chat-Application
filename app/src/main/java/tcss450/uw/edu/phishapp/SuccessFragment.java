@@ -33,7 +33,8 @@ public class SuccessFragment extends Fragment {
             // Could pass
 
 
-            Credentials credentials = (Credentials)getArguments().getSerializable((getString(R.string.key_credentials)));
+            Credentials credentials = (Credentials)getArguments().
+                    getSerializable((getString(R.string.keys_intent_credentials)));
             updateContent(credentials);
 
         }

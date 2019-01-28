@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import tcss450.uw.edu.phishapp.dummy.DummyContent;
-import tcss450.uw.edu.phishapp.dummy.DummyContent.DummyItem;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import tcss450.uw.edu.phishapp.SetLists.SetList;
+
 
 /**
  * A fragment representing a list of Items.
@@ -28,6 +30,9 @@ public class SetListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private List<SetList> mSetLists;
+    public static final String ARG_SET_LIST = "set lists";
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,9 +56,20 @@ public class SetListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mSetLists = new ArrayList<SetList>(
+                    Arrays.asList((SetList[]) getArguments().getSerializable(ARG_SET_LIST)));
         }
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (getArguments() != null) {
+//            // Could pass
+//            SetListItemFragment setListItemFragment = (SetListItemFragment) getArguments()
+//                    .getSerializable(getString(R.string.key_blogPost));
+//        }
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +85,7 @@ public class SetListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MySetListRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+           recyclerView.setAdapter(new MySetListRecyclerViewAdapter(mSetLists, mListener));
         }
         return view;
     }
@@ -104,6 +120,6 @@ public class SetListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(SetList item);
     }
 }
